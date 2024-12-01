@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PausedView : BaseView
 {
@@ -24,10 +25,10 @@ public class PausedView : BaseView
             ViewManager.Instance.Show<ScoreboardView>(true);
         });
 
-        //mainMenuButton.onClick.AddListener(() =>
-        //{
-
-        //});
+        mainMenuButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene(0);
+        });
 
         restartButton.onClick.AddListener(() =>
         {
