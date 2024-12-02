@@ -7,7 +7,6 @@ public class ScoreboardView : BaseView
     [SerializeField] private Button backButton;
     [SerializeField] private PlayerScoreboardCard cardPrefab;
     private VerticalLayoutGroup layoutGroup;
-    //private readonly Dictionary<string,PlayerScoreboardCard> playerCards = new Dictionary<string, PlayerScoreboardCard>();
     private readonly List<PlayerScoreboardCard> playerCards = new List<PlayerScoreboardCard>();
     public override void Init()
     {
@@ -15,8 +14,7 @@ public class ScoreboardView : BaseView
         layoutGroup = GetComponentInChildren<VerticalLayoutGroup>();    
         backButton.onClick.AddListener(() =>
         {
-            Show(false);
-            ViewManager.Instance.Show<PausedView>(true);
+            backButton.onClick.Invoke();
         });
     }
     public void AddPlayerCards(List<PlayerScoreboardCardData> cardsData)
