@@ -1457,8 +1457,52 @@ MonoBehaviour:
   LaneSystem: {fileID: 106057762}
   <ObstaclePools>k__BackingField:
   - {fileID: 4230759379826572186}
-  - {fileID: 3994382559241916552}
-  - {fileID: 7328150211815643165}
+--- !u!1 &1128800877
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1128800878}
+  - component: {fileID: 1128800879}
+  m_Layer: 0
+  m_Name: HealthPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1128800878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128800877}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1176782784}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1128800879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128800877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1290664e863a3d34596917f255587b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  capacity: 10
+  prefab: {fileID: -8324919039279460063, guid: dd1bb154e8c309a4aa1563049df380ab, type: 3}
 --- !u!1 &1176782783
 GameObject:
   m_ObjectHideFlags: 0
@@ -1489,6 +1533,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5750222507749656094}
+  - {fileID: 1128800878}
   - {fileID: 3591750642126941782}
   - {fileID: 1507006778095683194}
   - {fileID: 1119912663875091926}

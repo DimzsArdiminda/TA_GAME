@@ -57,7 +57,7 @@ public abstract class BasePool<T> : MonoBehaviour where T : PoolingObject<T>
     }
     #endregion
 
-    #region ContiansCheck
+    #region ContainsCheck
     public bool ContainsElement(T element)
     {
         return pool.ContainsElement(element);
