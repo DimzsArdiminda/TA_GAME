@@ -45,6 +45,8 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     public bool IsInvincible { get; private set; }
     public float InvincibilityTime { get; private set; } //PLAYER DATA ScriptableObject
 
+    private Coroutine invincibilityCoroutine;
+
     private void Awake()
     {
         GameSession.Instance.AddCommandTranslator(this);
@@ -114,9 +116,24 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     public IEnumerator GrantInvincibility()
     {
         IsInvincible = true;
+
+        if (invincibilityCoroutine != null)
+        {
+            StopCoroutine(invincibilityCoroutine);
+        }
+        invincibilityCoroutine = StartCoroutine(BlinkWhileInvincible());
+
         yield return new WaitForSeconds(InvincibilityTime);
+
         IsInvincible = false;
+
+        if (invincibilityCoroutine != null)
+        {
+            StopCoroutine(invincibilityCoroutine);
+            invincibilityCoroutine = null;
+        }
     }
+
     private void ReloadAnimator()
     {
         if (animator)
@@ -154,4 +171,34 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
             }
         }
     }
+
+    private IEnumerator BlinkWhileInvincible()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        float blinkInterval = 0.2f;
+
+        while (IsInvincible)
+        {
+            // Toggle visibility off
+            foreach (Renderer renderer in renderers)
+            {
+                renderer.enabled = false;
+            }
+            yield return new WaitForSeconds(blinkInterval);
+
+            // Toggle visibility on
+            foreach (Renderer renderer in renderers)
+            {
+                renderer.enabled = true;
+            }
+            yield return new WaitForSeconds(blinkInterval);
+        }
+
+        // Ensure visibility is restored
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = true;
+        }
+    }
+
 }
