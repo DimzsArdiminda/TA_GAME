@@ -25,7 +25,6 @@ public class ScoreboardView : BaseView
         
         foreach (var cardData in cardsData)
         {
-            Debug.Log("Adding player card, name: " + cardData.playerName + " score: " + cardData.playerScore);
             AddPlayerCard(cardData);
         }
     }

@@ -34,13 +34,16 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
         entries = entriesTable.entries;
         SortScoreboardEntriesByHighscore(entries);
         List<PlayerScoreboardCardData> scoreboardCardDatas = new List<PlayerScoreboardCardData>();  
-        foreach (var entry in entries)
+        int entriesCount = maxEntries != 0 ? maxEntries : entries.Count;
+        int entryLimit = entriesCount > entries.Count ? entries.Count : entriesCount; 
+        for (int i = 0; i < entryLimit ; i++)
         {
-            PlayerScoreboardCardData cardData = new PlayerScoreboardCardData(entry.Name, entry.Score.ToString());
+            PlayerScoreboardCardData cardData = new PlayerScoreboardCardData(entries[i].Name, entries[i].Score.ToString());
             scoreboardCardDatas.Add(cardData);
         }
+        Debug.Log("Scoreboard Started");
         scoreboardView.Init();
-        Debug.Log("DATA LOADED, PASS TO VIEW");
+        Debug.Log("ScoreboardView Initialized");
         scoreboardView.AddPlayerCards(scoreboardCardDatas);     
     }
 
@@ -54,21 +57,11 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
     public void SortScoreboardEntriesByHighscore(List<ScoreboardEntry> entries)
     {
         entries.Sort((x,y) => y.Score.CompareTo(x.Score));
-        Debug.Log("SORTED SCOREBOARD ENTRIES");
-        for (int i = 0; i < entries.Count; i++)
-        {
-            Debug.Log("Player: " + entries[i].Name + " Score: " + entries[i].Score);
-        }
     }
 
     public void SortScoreboardCardsDatasByHighscore(List<PlayerScoreboardCardData> scoreboardCardDatas)
     {
         scoreboardCardDatas.Sort((x, y) => y.playerScore.CompareTo(x.playerScore));
-        Debug.Log("Sorted Scoreboard Card Datas");
-        for (int i = 0; i < scoreboardCardDatas.Count; i++)
-        {
-            Debug.Log("Player: " + scoreboardCardDatas[i].playerName + " Score: " + scoreboardCardDatas[i].playerScore);
-        }
     }
 
     public void AddScoreboardEntry(ScoreboardEntry entry)
