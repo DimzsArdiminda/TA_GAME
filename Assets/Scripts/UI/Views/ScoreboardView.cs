@@ -14,11 +14,7 @@ public class ScoreboardView : BaseView
     {
         base.Init();
         layoutGroup = GetComponentInChildren<VerticalLayoutGroup>();
-        scoreboard.GetComponentInParent<Scoreboard>();
-        Debug.Log("PROPS");
-        Debug.Log(layoutGroup);
-        Debug.Log(scoreboard);
-        
+        scoreboard.GetComponentInParent<Scoreboard>();  
         backButton.onClick.AddListener(() =>
         {
             backButton.onClick.Invoke();

@@ -30,16 +30,15 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
             return;
         if (entriesTable.entries == null)
             return;
+      
+        entries = entriesTable.entries;
+        SortScoreboardEntriesByHighscore(entries);
         List<PlayerScoreboardCardData> scoreboardCardDatas = new List<PlayerScoreboardCardData>();  
-        for (int i = 0; i < entriesTable.entries.Count; i++)
+        foreach (var entry in entries)
         {
-            entries.Add(entriesTable.entries[i]);
-            OnEntryAdded?.Invoke(entriesTable.entries[i]);
-            PlayerScoreboardCardData cardData = new PlayerScoreboardCardData(entriesTable.entries[i].Name, entriesTable.entries[i].Score.ToString());
+            PlayerScoreboardCardData cardData = new PlayerScoreboardCardData(entry.Name, entry.Score.ToString());
             scoreboardCardDatas.Add(cardData);
         }
-        SortScoreboardEntriesByHighscore(entries);
-        SortScoreboardCardsDatasByHighscore(scoreboardCardDatas);
         scoreboardView.Init();
         Debug.Log("DATA LOADED, PASS TO VIEW");
         scoreboardView.AddPlayerCards(scoreboardCardDatas);     
@@ -55,11 +54,21 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
     public void SortScoreboardEntriesByHighscore(List<ScoreboardEntry> entries)
     {
         entries.Sort((x,y) => y.Score.CompareTo(x.Score));
+        Debug.Log("SORTED SCOREBOARD ENTRIES");
+        for (int i = 0; i < entries.Count; i++)
+        {
+            Debug.Log("Player: " + entries[i].Name + " Score: " + entries[i].Score);
+        }
     }
 
     public void SortScoreboardCardsDatasByHighscore(List<PlayerScoreboardCardData> scoreboardCardDatas)
     {
         scoreboardCardDatas.Sort((x, y) => y.playerScore.CompareTo(x.playerScore));
+        Debug.Log("Sorted Scoreboard Card Datas");
+        for (int i = 0; i < scoreboardCardDatas.Count; i++)
+        {
+            Debug.Log("Player: " + scoreboardCardDatas[i].playerName + " Score: " + scoreboardCardDatas[i].playerScore);
+        }
     }
 
     public void AddScoreboardEntry(ScoreboardEntry entry)
