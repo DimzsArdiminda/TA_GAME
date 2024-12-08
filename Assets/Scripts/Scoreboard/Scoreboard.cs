@@ -22,8 +22,9 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
 
     private void Start()
     {
-        GameSession.Instance.AddCommandTranslator(this);
+        GameSession.Instance?.AddCommandTranslator(this);
         string jsonScoreboardEntries = PlayerPrefs.GetString("ScoreboardEntriesTableTest"); //Binary file
+        Debug.Log(jsonScoreboardEntries);
         ScoreboardEntriesTable entriesTable = JsonUtility.FromJson<ScoreboardEntriesTable>(jsonScoreboardEntries);
         if (entriesTable == null)
             return;
@@ -39,7 +40,9 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
         }
         SortScoreboardEntriesByHighscore(entries);
         SortScoreboardCardsDatasByHighscore(scoreboardCardDatas);
-        scoreboardView.AddPlayerCards(scoreboardCardDatas);
+        scoreboardView.Init();
+        Debug.Log("DATA LOADED, PASS TO VIEW");
+        scoreboardView.AddPlayerCards(scoreboardCardDatas);     
     }
 
     public void AddScoreboardEntry(string entryName, int entryScore)

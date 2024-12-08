@@ -109,6 +109,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     {
         PlayerStateMachine.SetState(PlayerStateMachine.PlayerDeadState);
         GameSession.Instance.UpdateScoreboard(new ScoreboardEntry(name,PlayerStatictics.Score));
+        ViewManager.Instance.Show<DeadView>(true);
     }
 
     public IEnumerator GrantInvincibility()
