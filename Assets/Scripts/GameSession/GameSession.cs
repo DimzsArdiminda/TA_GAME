@@ -33,9 +33,9 @@ public class GameSession : MonoBehaviour,IResettable
     {
        inputTranslator.Tick();
        Curver.Tick();
-        // curver.SinCurveX();
-        // Curver.SinCurveY();
-       //Curver.TurnWorldToLeft();
+       Curver.SinCurveX();
+       Curver.SinCurveY();
+       Curver.TurnWorldToLeft();
     }
 
     private void Init()

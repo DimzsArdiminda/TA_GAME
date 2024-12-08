@@ -62,7 +62,7 @@ public class WorldCurver : MonoBehaviour
 		//CurveStrengthY = Mathf.PingPong(Time.time, endRange - startRange);
 		//PingPong between 0 and 1
 		float time = Mathf.PingPong(Time.time * 0.05f, 1);
-		CurveStrengthX = Mathf.Lerp(startRange, endRange, time);
+		CurveStrengthY = Mathf.Lerp(startRange, endRange, time);
 		//curveStrengthX = Mathf.Clamp(Mathf.Sin(Time.time),-0.001f,0.001f);	
 	}
 }
