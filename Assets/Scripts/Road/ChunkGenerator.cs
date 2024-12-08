@@ -13,15 +13,22 @@ public class ChunkGenerator : MonoBehaviour
     {
         if (ObstaclePools.IsEmpty())
             return chunkToFill;
+
         var obstaclePool = ObstaclePools.GetRandomElement();
         var obstacle = obstaclePool.Spawn();
         chunkToFill.Obstacles.Add(obstacle);
         obstacle.transform.SetParent(chunkToFill.transform, true);
         obstacle.transform.localPosition = chunkToFill.Grid.GetRandomPosition();
+
         if (obstacle.IsOnAllLanes)
         {
-            obstacle.transform.localPosition = new Vector3(LaneSystem.CenterLane * LaneSystem.LaneWidth, transform.localPosition.y, transform.localPosition.z);
+            obstacle.transform.localPosition = new Vector3(
+                LaneSystem.CenterLane * LaneSystem.LaneWidth, 
+                transform.localPosition.y, 
+                transform.localPosition.z
+            );
         }
+
         return chunkToFill;
     }
 }
