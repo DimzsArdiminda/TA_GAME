@@ -15,31 +15,42 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
 {
     [SerializeField] private int maxEntries;
     private List<ScoreboardEntry> entries = new List<ScoreboardEntry>();
-
+    public  List<PlayerScoreboardCardData> scoreboardCardDatas = new List<PlayerScoreboardCardData>(); 
     public event Action<ScoreboardEntry> OnEntryAdded;
 
     [SerializeField] private ScoreboardView scoreboardView;
 
     private void Start()
     {
-        GameSession.Instance.AddCommandTranslator(this);
+        InitializeScoreboard();
+    }
+
+    public void InitializeScoreboard() {
+        entries = new List<ScoreboardEntry>();
+        scoreboardCardDatas = new List<PlayerScoreboardCardData>();
+         GameSession.Instance?.AddCommandTranslator(this);
         string jsonScoreboardEntries = PlayerPrefs.GetString("ScoreboardEntriesTableTest"); //Binary file
+        Debug.Log(jsonScoreboardEntries);
         ScoreboardEntriesTable entriesTable = JsonUtility.FromJson<ScoreboardEntriesTable>(jsonScoreboardEntries);
         if (entriesTable == null)
             return;
         if (entriesTable.entries == null)
             return;
-        List<PlayerScoreboardCardData> scoreboardCardDatas = new List<PlayerScoreboardCardData>();  
-        for (int i = 0; i < entriesTable.entries.Count; i++)
+      
+        entries = entriesTable.entries;
+        SortScoreboardEntriesByHighscore(entries);
+     
+        int entriesCount = maxEntries != 0 ? maxEntries : entries.Count;
+        int entryLimit = entriesCount > entries.Count ? maxEntries : entriesCount; 
+        for (int i = 0; i < entryLimit ; i++)
         {
-            entries.Add(entriesTable.entries[i]);
-            OnEntryAdded?.Invoke(entriesTable.entries[i]);
-            PlayerScoreboardCardData cardData = new PlayerScoreboardCardData(entriesTable.entries[i].Name, entriesTable.entries[i].Score.ToString());
+            PlayerScoreboardCardData cardData = new PlayerScoreboardCardData(entries[i].Name, entries[i].Score.ToString());
             scoreboardCardDatas.Add(cardData);
         }
-        SortScoreboardEntriesByHighscore(entries);
-        SortScoreboardCardsDatasByHighscore(scoreboardCardDatas);
-        scoreboardView.AddPlayerCards(scoreboardCardDatas);
+        Debug.Log("Scoreboard Started");
+        scoreboardView.Init();
+        Debug.Log("ScoreboardView Initialized");
+        scoreboardView.AddPlayerCards(scoreboardCardDatas);     
     }
 
     public void AddScoreboardEntry(string entryName, int entryScore)

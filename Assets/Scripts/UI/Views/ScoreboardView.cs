@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,12 +7,15 @@ public class ScoreboardView : BaseView
 {
     [SerializeField] private Button backButton;
     [SerializeField] private PlayerScoreboardCard cardPrefab;
+    [SerializeField] private Scoreboard scoreboard;
     private VerticalLayoutGroup layoutGroup;
-    private readonly List<PlayerScoreboardCard> playerCards = new List<PlayerScoreboardCard>();
+    private List<PlayerScoreboardCard> playerCards = new List<PlayerScoreboardCard>();
     public override void Init()
     {
         base.Init();
-        layoutGroup = GetComponentInChildren<VerticalLayoutGroup>();    
+        playerCards = new List<PlayerScoreboardCard>();
+        layoutGroup = GetComponentInChildren<VerticalLayoutGroup>();
+        scoreboard.GetComponentInParent<Scoreboard>();  
         backButton.onClick.AddListener(() =>
         {
             backButton.onClick.Invoke();
@@ -19,6 +23,7 @@ public class ScoreboardView : BaseView
     }
     public void AddPlayerCards(List<PlayerScoreboardCardData> cardsData)
     {
+        
         foreach (var cardData in cardsData)
         {
             AddPlayerCard(cardData);
@@ -27,22 +32,22 @@ public class ScoreboardView : BaseView
        
     private void AddPlayerCard(PlayerScoreboardCardData cardData)
     {
-       //if (playerCards.ContainsKey(cardData.playerName))
-        //    return;
+        try{
         PlayerScoreboardCard playerScoreboardCard = Instantiate(cardPrefab);
-        playerScoreboardCard.transform.SetParent(layoutGroup.transform, false);
+        playerScoreboardCard.transform.SetParent(layoutGroup?.transform, false);
         playerScoreboardCard.UpdateCard(cardData);   
         playerCards.Add(playerScoreboardCard);
+        } catch (Exception err) {
+            PlayerScoreboardCard playerScoreboardCard = Instantiate(cardPrefab);
+            Debug.Log(playerScoreboardCard);
+            Debug.Log(layoutGroup);
+            Debug.LogError(err);
+        }
+
     }
 
     public void RemovePlayerCard(string cardTag)
     {
-        //if (playerCards.ContainsKey(cardTag))
-        //{
-        //playerCards.TryGetValue(cardTag, out PlayerScoreboardCard playerScoreboardCard);
-        //playerScoreboardCard.gameObject.SetActive(false); //TODO: Pooling
-        //playerCards.Remove(cardTag);
-        //}
         foreach (var playerCard in playerCards)
         {
             if (cardTag == playerCard.name)
@@ -55,7 +60,6 @@ public class ScoreboardView : BaseView
 
     public void RefreshPlayerCard(PlayerScoreboardCardData cardData)
     {
-        //if (playerCards.TryGetValue(cardData.playerName, out PlayerScoreboardCard card))
         foreach (var playerCard in playerCards)
         {
             if (cardData.playerName == playerCard.name)

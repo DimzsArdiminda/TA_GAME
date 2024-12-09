@@ -87,6 +87,7 @@ public class GameSession : MonoBehaviour,IResettable
     public void UpdateScoreboard(ScoreboardEntry entry)
     {
         scoreboard.AddScoreboardEntry(entry);
+        scoreboard.InitializeScoreboard();
     }
 
     public void RestartSession()

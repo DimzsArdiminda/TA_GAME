@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
@@ -42,6 +44,10 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     #endregion
 
+    [SerializeField] private Scoreboard scoreboard;
+    
+    List<PlayerScoreboardCardData> scores;
+
     public bool IsInvincible { get; private set; }
     public float InvincibilityTime { get; private set; } //PLAYER DATA ScriptableObject
 
@@ -59,6 +65,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
         PlayerStatictics = GetComponent<Statistics>();
         PlayerStateMachine = new PlayerStateMachine(this);
         InvincibilityTime = playerData.InvincibilityTime;
+        scores = scoreboard.scoreboardCardDatas;
     }  
     private void OnEnable()
     {
@@ -120,10 +127,33 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
         }
     }
 
+    private (bool, int) CheckIfPlayerScoreIsTop10(List<int> scores, int newScore)
+    {
+        List<int> scoresCopy = new List<int>(scores){ newScore };
+        scoresCopy.Sort((a, b) => b.CompareTo(a));
+        int position = scoresCopy.IndexOf(newScore);
+        bool isTop10 = position <= 10;
+
+        return (isTop10, isTop10 ? position : -1);
+    }
+
     private void Die()
     {
         PlayerStateMachine.SetState(PlayerStateMachine.PlayerDeadState);
-        GameSession.Instance.UpdateScoreboard(new ScoreboardEntry(name,PlayerStatictics.Score));
+
+        float score = PlayerStatictics.Score;
+        List<int> scoreValues = new List<int>();
+        foreach (var cardData in scores)
+        {
+            scoreValues.Add(int.Parse(cardData.playerScore));
+        }
+        (bool, int) checkIsPlayerTop10 = CheckIfPlayerScoreIsTop10(scoreValues, Mathf.FloorToInt(score));
+        if (checkIsPlayerTop10.Item1 && checkIsPlayerTop10.Item2 != -1) {
+            Debug.Log("PLAYER IS TOP 10 ON INDEX " + checkIsPlayerTop10.Item2);
+            ViewManager.Instance.Show<InputUsernameView>(true);
+        } else {
+            ViewManager.Instance.Show<DeadView>(true);
+        }
     }
 
     public IEnumerator GrantInvincibility()
