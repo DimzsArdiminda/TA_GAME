@@ -51,6 +51,8 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     public bool IsInvincible { get; private set; }
     public float InvincibilityTime { get; private set; } //PLAYER DATA ScriptableObject
 
+    private Coroutine invincibilityCoroutine;
+
     private void Awake()
     {
         GameSession.Instance.AddCommandTranslator(this);
@@ -90,8 +92,21 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     public float PendingAdditionalOffset { get; private set; }
     private void OnTriggerEnter(Collider other) 
     {
-        if (other.TryGetComponent(out IDamageDealer damageDealer)) //switch..case
+        if (other.TryGetComponent(out IHealthRestorer healthRestorer))
         {
+            int healAmount = 1;       
+            var healableComponents = GetComponents<IHealable>();
+            foreach (var component in healableComponents)
+            {
+                healthRestorer.RestoreHealth(component, healAmount);
+            }
+        }
+        else if (other.TryGetComponent(out IDamageDealer damageDealer))
+        {   
+            if (other.TryGetComponent(out IHealthRestorer healer))
+            {
+                return;
+            }
             if (IsInvincible)
                 return;
             int damageAmount = 1;       
@@ -102,7 +117,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
             }
             StartCoroutine(GrantInvincibility());
         }
-        if (other.TryGetComponent(out IObstacle obstacle)) //switch..case
+        if (other.TryGetComponent(out IObstacle obstacle))
         {
             obstacle.Impact();
         }
@@ -144,9 +159,24 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     public IEnumerator GrantInvincibility()
     {
         IsInvincible = true;
+
+        if (invincibilityCoroutine != null)
+        {
+            StopCoroutine(invincibilityCoroutine);
+        }
+        invincibilityCoroutine = StartCoroutine(BlinkWhileInvincible());
+
         yield return new WaitForSeconds(InvincibilityTime);
+
         IsInvincible = false;
+
+        if (invincibilityCoroutine != null)
+        {
+            StopCoroutine(invincibilityCoroutine);
+            invincibilityCoroutine = null;
+        }
     }
+
     private void ReloadAnimator()
     {
         if (animator)
@@ -184,4 +214,34 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
             }
         }
     }
+
+    private IEnumerator BlinkWhileInvincible()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        float blinkInterval = 0.2f;
+
+        while (IsInvincible)
+        {
+            // Toggle visibility off
+            foreach (Renderer renderer in renderers)
+            {
+                renderer.enabled = false;
+            }
+            yield return new WaitForSeconds(blinkInterval);
+
+            // Toggle visibility on
+            foreach (Renderer renderer in renderers)
+            {
+                renderer.enabled = true;
+            }
+            yield return new WaitForSeconds(blinkInterval);
+        }
+
+        // Ensure visibility is restored
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = true;
+        }
+    }
+
 }
