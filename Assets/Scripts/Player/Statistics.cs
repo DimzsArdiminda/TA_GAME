@@ -13,6 +13,9 @@ public class Statistics : MonoBehaviour,IResettable
     public event Action<float> OnDistanceChanged = delegate { };
     public event Action<int> OnScoreCalculated = delegate { };
     [SerializeField] private PlayerHUDView PlayerHUD;
+
+    [SerializeField] private InputUsernameView InputUsername;
+
     private void Awake()
     {
         ResetToDefault();
@@ -44,6 +47,7 @@ public class Statistics : MonoBehaviour,IResettable
         Score = Mathf.FloorToInt(coinCount * coinMultiplier + distance);
         OnScoreCalculated?.Invoke(Score);
         PlayerHUD.UpdateScore(Score.ToString());
+        InputUsername.UpdateScore(Score.ToString());
     }
 
     public void ResetToDefault()

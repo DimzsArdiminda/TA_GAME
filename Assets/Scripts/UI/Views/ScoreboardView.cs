@@ -9,10 +9,11 @@ public class ScoreboardView : BaseView
     [SerializeField] private PlayerScoreboardCard cardPrefab;
     [SerializeField] private Scoreboard scoreboard;
     private VerticalLayoutGroup layoutGroup;
-    private readonly List<PlayerScoreboardCard> playerCards = new List<PlayerScoreboardCard>();
+    private List<PlayerScoreboardCard> playerCards = new List<PlayerScoreboardCard>();
     public override void Init()
     {
         base.Init();
+        playerCards = new List<PlayerScoreboardCard>();
         layoutGroup = GetComponentInChildren<VerticalLayoutGroup>();
         scoreboard.GetComponentInParent<Scoreboard>();  
         backButton.onClick.AddListener(() =>

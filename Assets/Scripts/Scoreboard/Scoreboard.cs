@@ -15,14 +15,20 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
 {
     [SerializeField] private int maxEntries;
     private List<ScoreboardEntry> entries = new List<ScoreboardEntry>();
-
+    public  List<PlayerScoreboardCardData> scoreboardCardDatas = new List<PlayerScoreboardCardData>(); 
     public event Action<ScoreboardEntry> OnEntryAdded;
 
     [SerializeField] private ScoreboardView scoreboardView;
 
     private void Start()
     {
-        GameSession.Instance?.AddCommandTranslator(this);
+        InitializeScoreboard();
+    }
+
+    public void InitializeScoreboard() {
+        entries = new List<ScoreboardEntry>();
+        scoreboardCardDatas = new List<PlayerScoreboardCardData>();
+         GameSession.Instance?.AddCommandTranslator(this);
         string jsonScoreboardEntries = PlayerPrefs.GetString("ScoreboardEntriesTableTest"); //Binary file
         Debug.Log(jsonScoreboardEntries);
         ScoreboardEntriesTable entriesTable = JsonUtility.FromJson<ScoreboardEntriesTable>(jsonScoreboardEntries);
@@ -33,9 +39,9 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
       
         entries = entriesTable.entries;
         SortScoreboardEntriesByHighscore(entries);
-        List<PlayerScoreboardCardData> scoreboardCardDatas = new List<PlayerScoreboardCardData>();  
+     
         int entriesCount = maxEntries != 0 ? maxEntries : entries.Count;
-        int entryLimit = entriesCount > entries.Count ? entries.Count : entriesCount; 
+        int entryLimit = entriesCount > entries.Count ? maxEntries : entriesCount; 
         for (int i = 0; i < entryLimit ; i++)
         {
             PlayerScoreboardCardData cardData = new PlayerScoreboardCardData(entries[i].Name, entries[i].Score.ToString());
