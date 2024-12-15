@@ -4,26 +4,36 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public Sounds[] sound;
-    // Start is called before the first frame update
-    void Start()
-    {
-        foreach(Sounds s in sound)
-        {
-            s.source = gameObject.AddComponent<AudioSource>();
-            s.source.clip = s.clip;
-            s.source.loop = s.loop;
-        }
-        PlaySound("MainMenu");
-    }
+   [Header("----------- Audio Sources -------------")]
+   [SerializeField] AudioSource musicSource;
+   [SerializeField] AudioSource SFXSource;
 
-    public void PlaySound(string name)
-    {
-        foreach(Sounds s in sound)
-        {
-            if(s.name == name)
-            s.source.Play();
-        }
-    }
+   [Header("----------- Background Music -------------")]
+   public AudioClip background;
 
+   [Header("----------- Sound Effects -------------")]
+   public AudioClip buttonClick;
+   public AudioClip newRun;
+   public AudioClip gameOver;
+   public AudioClip healthPoint;
+   public AudioClip missionComplete;
+
+   public void Start()
+   {
+       Debug.Log("Starting background music...");
+       musicSource.clip = background;
+       musicSource.Play();
+   }
+
+   public void PlaySFX(AudioClip clip)
+   {
+        // SFXSource.PlayOneShot(clip);
+        if (SFXSource != null && clip != null)
+        {
+            SFXSource.PlayOneShot(clip);
+        }
+    //    Debug.Log("Playing sound effect: " + clip.name);
+    //    SFXSource.clip = clip;
+    //    SFXSource.Play();
+   }
 }

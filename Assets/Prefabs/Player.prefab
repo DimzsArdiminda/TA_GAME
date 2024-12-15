@@ -5166,7 +5166,7 @@ GameObject:
   - component: {fileID: 6456075115708800826}
   - component: {fileID: 7896966939631641298}
   - component: {fileID: 7509186232753540492}
-  - component: {fileID: 484501357235257497}
+  - component: {fileID: 6220960724527003774}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -5346,7 +5346,7 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 928d6efd735c3814d955e3f955a0264a, type: 2}
   laneSystem: {fileID: 0}
   scoreboard: {fileID: 0}
---- !u!82 &484501357235257497
+--- !u!82 &6220960724527003774
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

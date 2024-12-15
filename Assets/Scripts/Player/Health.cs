@@ -26,6 +26,7 @@ public class Health : MonoBehaviour, IDamageable,IHealable, IResettable
     public int CurrentHealth { get; private set; }
 
     [SerializeField] private HeartsBarView healthBarView;
+    [SerializeField] private AudioManager audioManager; // Referensi AudioManager
 
     private HealthArgs healthArgs;
     public event EventHandler<HealthArgs> OnHealthChanged = delegate { };
@@ -49,6 +50,13 @@ public class Health : MonoBehaviour, IDamageable,IHealable, IResettable
         {
             OnOutOfHealth?.Invoke();
         }
+        // CurrentHealth -= amount;
+        // audioManager.PlaySFX(audioManager.healthPoint); // Memutar efek suara kerusakan
+        // if (CurrentHealth < 1)
+        // {
+        //     audioManager.PlaySFX(audioManager.gameOver); // Memutar suara Game Over
+        // }
+
     }
     public void Heal(int amount)
     {
