@@ -50,12 +50,16 @@ public class Health : MonoBehaviour, IDamageable,IHealable, IResettable
         {
             OnOutOfHealth?.Invoke();
         }
-        // CurrentHealth -= amount;
-        // audioManager.PlaySFX(audioManager.healthPoint); // Memutar efek suara kerusakan
-        // if (CurrentHealth < 1)
-        // {
-        //     audioManager.PlaySFX(audioManager.gameOver); // Memutar suara Game Over
-        // }
+    // // Fungsi untuk memainkan efek suara
+    //     private void PlayDamageSound()
+    //     {
+    //         // Contoh: Menggunakan AudioSource
+    //         AudioSource PlaySFX = GetComponent<AudioSource>();
+    //         if (SFXSource != null && PlaySFX.clip != null)
+    //         {
+    //             SFXSource.Play();
+    //         }
+    //     }
 
     }
     public void Heal(int amount)

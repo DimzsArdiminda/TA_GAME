@@ -4,36 +4,71 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-   [Header("----------- Audio Sources -------------")]
-   [SerializeField] AudioSource musicSource;
-   [SerializeField] AudioSource SFXSource;
+    [Header("----------- Audio Sources -------------")]
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource SFXSource;
 
-   [Header("----------- Background Music -------------")]
-   public AudioClip background;
+    [Header("----------- Background Music -------------")]
+    public AudioClip background;
 
-   [Header("----------- Sound Effects -------------")]
-   public AudioClip buttonClick;
-   public AudioClip newRun;
-   public AudioClip gameOver;
-   public AudioClip healthPoint;
-   public AudioClip missionComplete;
+    [Header("----------- Sound Effects -------------")]
+    public List<AudioClip> soundEffects; // Koleksi efek suara
 
-   public void Start()
-   {
-       Debug.Log("Starting background music...");
-       musicSource.clip = background;
-       musicSource.Play();
-   }
+    public void Start()
+    {
+        // Mulai musik latar
+        musicSource.clip = background;
+        musicSource.Play();
+    }
 
-   public void PlaySFX(AudioClip clip)
-   {
-        // SFXSource.PlayOneShot(clip);
+    // Mainkan semua suara dalam daftar `audioSources`
+    public List<AudioSource> audioSources;
+
+    private void PlayAllSounds()
+    {
+        foreach (var source in audioSources)
+        {
+            source.Play();
+        }
+    }
+
+    // Mainkan efek suara berdasarkan AudioClip
+    public void PlaySFX(AudioClip clip)
+    {
         if (SFXSource != null && clip != null)
         {
             SFXSource.PlayOneShot(clip);
         }
-    //    Debug.Log("Playing sound effect: " + clip.name);
-    //    SFXSource.clip = clip;
-    //    SFXSource.Play();
-   }
+        else
+        {
+            Debug.LogWarning("SFXSource or clip is null.");
+        }
+    }
+
+    // Mainkan efek suara berdasarkan nama
+    public void PlaySFXByName(string soundName)
+    {
+        AudioClip clip = GetSoundClipByName(soundName); // Cari klip berdasarkan nama
+        if (clip != null)
+        {
+            PlaySFX(clip);
+        }
+        else
+        {
+            Debug.LogWarning($"Sound: {soundName} not found!");
+        }
+    }
+
+    // Cari AudioClip berdasarkan nama
+    private AudioClip GetSoundClipByName(string soundName)
+    {
+        foreach (AudioClip clip in soundEffects)
+        {
+            if (clip.name == soundName) // Bandingkan nama klip
+            {
+                return clip;
+            }
+        }
+        return null;
+    }
 }
