@@ -4,11 +4,19 @@ using UnityEngine;
 public class HealthCollectible : PoolingObject<HealthCollectible>, IHealthRestorer, IResettable, IObstacle
 {
     public BoxCollider Collider { get; private set; }
- 
+
+    // AudioManager audioManager;
+
     private void Awake()
     {
         Collider = GetComponent<BoxCollider>();
+        // audioManager = GameObject.FindWithTag("Audio").GetComponent<AudioManager>();
+        // if (audioManager == null)
+        // {
+        //     Debug.LogError("AudioManager tidak ditemukan!");
+        // }
     }
+
     public void ResetToDefault()
     {   
         transform.localPosition = Vector3.zero;
@@ -19,6 +27,10 @@ public class HealthCollectible : PoolingObject<HealthCollectible>, IHealthRestor
     public void Impact()
     {
         ResetToDefault();
+        // if (audioManager != null)
+        // {
+        //     audioManager.PlaySFXByName("HealthRechargePoint");
+        // }
     }
     public void RestoreHealth(IHealable target, int amount)
     {   
